@@ -1,59 +1,24 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "My Lab Journal",
-    "section": "",
-    "text": "Welcome to my Business Data Science Basics Journal"
-  },
-  {
-    "objectID": "index.html#how-to-use",
-    "href": "index.html#how-to-use",
-    "title": "My Lab Journal",
-    "section": "How to use",
-    "text": "How to use\n\nAccept the assignment and get your own github repo.\nBlog/journal what you are doing in R, by editing the .qmd files.\nSee the links page for lots of helpful links on learning R.\nChange everything to make it your own.\nMake sure to render you website everytime before you want to upload changes"
-  },
-  {
-    "objectID": "content/02_notes/05_class_notes.html",
-    "href": "content/02_notes/05_class_notes.html",
-    "title": "Class Notes",
-    "section": "",
-    "text": "IMPORTANT: You can delete everything in here and start fresh. You might want to start by not deleting anything above this line until you know what that stuff is doing.\nThis is an .qmd file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a # in front of your text, it will create a top level-header."
-  },
-  {
-    "objectID": "content/01_journal/03_data_wrangling.html",
-    "href": "content/01_journal/03_data_wrangling.html",
-    "title": "Data Wrangling",
-    "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
-  },
-  {
     "objectID": "content/01_journal/01_tidyverse.html",
     "href": "content/01_journal/01_tidyverse.html",
     "title": "Tidyverse",
     "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh.\nThis is a .qmd file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a # in front of your text, it will create a top level-header.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+    "text": "# Challenge"
   },
   {
-    "objectID": "content/01_journal/01_tidyverse.html#header-2",
-    "href": "content/01_journal/01_tidyverse.html#header-2",
+    "objectID": "content/01_journal/01_tidyverse.html#task-1",
+    "href": "content/01_journal/01_tidyverse.html#task-1",
     "title": "Tidyverse",
-    "section": "2.1 Header 2",
-    "text": "2.1 Header 2\n\nHeader 3\n\nHeader 4\n\nHeader 5\n\nHeader 6"
+    "section": "\n1 Task 1",
+    "text": "1 Task 1\nFor task 1, we load, wrangle and visualize the data wrt. to revenue by state.\nLoading of libraries\n\nlibrary(\"readxl\")\n\n#&gt; Warning: package 'readxl' was built under R version 4.2.3\n\nlibrary(\"magrittr\")\n\n#&gt; Warning: package 'magrittr' was built under R version 4.2.3\n\nlibrary(\"tidyverse\")\n\n#&gt; Warning: package 'tidyverse' was built under R version 4.2.3\n\n\n#&gt; Warning: package 'ggplot2' was built under R version 4.2.3\n\n\n#&gt; Warning: package 'tibble' was built under R version 4.2.3\n\n\n#&gt; Warning: package 'tidyr' was built under R version 4.2.3\n\n\n#&gt; Warning: package 'readr' was built under R version 4.2.3\n\n\n#&gt; Warning: package 'purrr' was built under R version 4.2.3\n\n\n#&gt; Warning: package 'dplyr' was built under R version 4.2.3\n\n\n#&gt; Warning: package 'stringr' was built under R version 4.2.3\n\n\n#&gt; Warning: package 'forcats' was built under R version 4.2.3\n\n\n#&gt; Warning: package 'lubridate' was built under R version 4.2.3\n\n\n#&gt; ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n#&gt; ✔ dplyr     1.1.4     ✔ readr     2.1.5\n#&gt; ✔ forcats   1.0.0     ✔ stringr   1.5.1\n#&gt; ✔ ggplot2   3.5.0     ✔ tibble    3.2.1\n#&gt; ✔ lubridate 1.9.3     ✔ tidyr     1.3.1\n#&gt; ✔ purrr     1.0.2     \n#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n#&gt; ✖ tidyr::extract()   masks magrittr::extract()\n#&gt; ✖ dplyr::filter()    masks stats::filter()\n#&gt; ✖ dplyr::lag()       masks stats::lag()\n#&gt; ✖ purrr::set_names() masks magrittr::set_names()\n#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(lubridate)\n\nLoading and joining of data\nData is stored in content/data, so we have to change the working directory for loading of data. Then we read the data in and join it.\n\nsetwd(\"..\")\nbikes_tbl &lt;- read_excel(\"./data/01_bike_sales/01_raw_data/bikes.xlsx\")\norder_lines&lt;-read_excel(\"./data/01_bike_sales/01_raw_data/orderlines.xlsx\")\n\n#&gt; New names:\n#&gt; • `` -&gt; `...1`\n\nbikeshops_tbl  &lt;- read_excel(\"./data/01_bike_sales/01_raw_data/bikeshops.xlsx\")\n# joining\nbikes_orderlines_bikeshops &lt;-order_lines %&gt;%\n  left_join(bikes_tbl, by=c(\"product.id\" = \"bike.id\")) %&gt;%\n  left_join(bikeshops_tbl, by=c(\"customer.id\" = \"bikeshop.id\"))\n\nbikes_orderlines_bikeshops %&gt;% glimpse()\n\n#&gt; Rows: 15,644\n#&gt; Columns: 19\n#&gt; $ ...1           &lt;chr&gt; \"1\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\"…\n#&gt; $ order.id       &lt;dbl&gt; 1, 1, 2, 2, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7…\n#&gt; $ order.line     &lt;dbl&gt; 1, 2, 1, 2, 1, 2, 3, 4, 5, 1, 1, 2, 3, 4, 1, 2, 3, 4, 1…\n#&gt; $ order.date     &lt;dttm&gt; 2015-01-07, 2015-01-07, 2015-01-10, 2015-01-10, 2015-0…\n#&gt; $ customer.id    &lt;dbl&gt; 2, 2, 10, 10, 6, 6, 6, 6, 6, 22, 8, 8, 8, 8, 16, 16, 16…\n#&gt; $ product.id     &lt;dbl&gt; 2681, 2411, 2629, 2137, 2367, 1973, 2422, 2655, 2247, 2…\n#&gt; $ quantity       &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1…\n#&gt; $ model          &lt;chr&gt; \"Spectral CF 7 WMN\", \"Ultimate CF SLX Disc 8.0 ETAP\", \"…\n#&gt; $ model.year     &lt;dbl&gt; 2021, 2020, 2021, 2019, 2020, 2020, 2020, 2021, 2020, 2…\n#&gt; $ frame.material &lt;chr&gt; \"carbon\", \"carbon\", \"carbon\", \"carbon\", \"aluminium\", \"c…\n#&gt; $ weight         &lt;dbl&gt; 13.80, 7.44, 14.06, 8.80, 11.50, 8.80, 8.20, 8.85, 14.4…\n#&gt; $ price          &lt;dbl&gt; 3119, 5359, 2729, 1749, 1219, 1359, 2529, 1559, 3899, 6…\n#&gt; $ category       &lt;chr&gt; \"Mountain - Trail - Spectral\", \"Road - Race - Ultimate\"…\n#&gt; $ gender         &lt;chr&gt; \"female\", \"unisex\", \"unisex\", \"unisex\", \"unisex\", \"unis…\n#&gt; $ url            &lt;chr&gt; \"https://www.canyon.com/en-de/mountain-bikes/trail-bike…\n#&gt; $ name           &lt;chr&gt; \"AlexandeRad\", \"AlexandeRad\", \"WITT-RAD\", \"WITT-RAD\", \"…\n#&gt; $ location       &lt;chr&gt; \"Hamburg, Hamburg\", \"Hamburg, Hamburg\", \"Bremen, Bremen…\n#&gt; $ lat            &lt;dbl&gt; 53.57532, 53.57532, 53.07379, 53.07379, 48.78234, 48.78…\n#&gt; $ lng            &lt;dbl&gt; 10.015340, 10.015340, 8.826754, 8.826754, 9.180819, 9.1…\n\n\nWrangling\nWe reuse total price logic for easy plotting and separate location into city and state.\n\nbikes_orderlines_bikeshops&lt;-bikes_orderlines_bikeshops %&gt;%  \n  mutate(total.price = price * quantity) %&gt;%\n  separate(col    = location,\n           into   = c(\"city\", \"state\"),\n           sep    = \", \") \n\nGrouping/Manipulation\nWe group the data by state and sum up the total price. Then we reuse the sales_text for nicer plotting.\n\nsales_by_location&lt;- bikes_orderlines_bikeshops[, c(\"state\", \"city\", \"total.price\")] %&gt;%\n  group_by(state) %&gt;%\n  summarize(sales=sum(total.price)) %&gt;%\n  mutate(sales_text = scales::dollar(sales, big.mark = \".\", \n                                     decimal.mark = \",\", \n                                     prefix = \"\", \n                                     suffix = \" €\"))\nsales_by_location\n\n\n\n  \n\n\n\nVisualization\nWe visualize the sales data by state. By inspection we find out, that NRW has the most revenue from bike sales.\n\nsales_by_location %&gt;%\n  # color by category_1\n  ggplot(aes(x = state, y = sales, fill=state)) +\n  geom_bar(stat = \"identity\") +  # bar plot\n  geom_label(aes(label = sales_text), position = position_stack(vjust = 0.95), size=2.5\n  ) + # adding labels to the bars\n\n  scale_y_continuous(labels = scales::dollar_format(big.mark = \".\", \n                                                    decimal.mark = \",\", \n                                                    prefix = \"\", \n                                                    suffix = \" €\")) +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1))+ # changing direction of labels\n  labs(title = \"Revenue and state\",\n       subtitle = \"North Rhine-Westphalia has most revenue, then Bremen, followed by Bavaria.\", x = \"State\", y = \"Revenue\", fill = \"State\") # legend, title and subtitle"
   },
   {
-    "objectID": "content/01_journal/02_data_acquisition.html",
-    "href": "content/01_journal/02_data_acquisition.html",
-    "title": "Data Acquisition",
-    "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
-  },
-  {
-    "objectID": "content/01_journal/04_data_visualization.html",
-    "href": "content/01_journal/04_data_visualization.html",
-    "title": "Data Visualization",
-    "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
+    "objectID": "content/01_journal/01_tidyverse.html#task-2",
+    "href": "content/01_journal/01_tidyverse.html#task-2",
+    "title": "Tidyverse",
+    "section": "\n2 Task 2",
+    "text": "2 Task 2\nFor task 2, we load, wrangle and visualize the data wrt. revenue by state and year. Loading and wrangling are not necessary, as we can reuse our results from before.\nGrouping\nThis time we group by location and year.\n\nsales_by_location_and_year&lt;-bikes_orderlines_bikeshops[, c(\"order.date\", \"state\", \"city\", \"total.price\")]\nsales_by_location_and_year_grouped&lt;- sales_by_location_and_year %&gt;%\n  mutate(order.date = year(order.date)) %&gt;%\n  group_by(order.date, state) %&gt;%\n  summarize(sales=sum(total.price)) %&gt;%\n  mutate(sales_text = scales::dollar(sales, big.mark = \".\", \n                                     decimal.mark = \",\", \n                                     prefix = \"\", \n                                     suffix = \" €\"))\n\n#&gt; `summarise()` has grouped output by 'order.date'. You can override using the\n#&gt; `.groups` argument.\n\nsales_by_location_and_year\n\n\n\n  \n\n\n\nVisualization\nWe do two plots, once a facet plot and once a stacked bar plot, as the latter visualizes the proportions quite nicely, while the former helps understand the individual trend.\nFirst the facet plot:\n\nsales_by_location_and_year_grouped %&gt;%\n  # color by category_1\n  ggplot(aes(x = order.date, y = sales, fill = state)) +\n  # stack\n  geom_bar(stat = \"identity\") +\n  geom_label(aes(label = sales_text), position = position_stack(vjust = 0.5), size=2.5\n  ) + # Adding labels to the bars\n  geom_smooth(method = \"lm\", se = FALSE) +\n  facet_wrap(~state) +  # Facet by state\n  scale_y_continuous(labels = scales::dollar_format(big.mark = \".\", \n                                                    decimal.mark = \",\", \n                                                    prefix = \"\", \n                                                    suffix = \" €\")) +\n  labs(title = \"Revenue by year and state\",\n       subtitle = \"Some states have an upwards trend, some stagnate and few have a slight downward trend.\", x = \"Year\", y = \"Revenue\", fill = \"State\")\n\n#&gt; `geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\nStacked bar plot:\n\nsales_by_location_and_year_grouped %&gt;%\n  # color by category_1\n  ggplot(aes(x = order.date, y = sales, fill = state)) +\n  # stack\n  geom_bar(stat = \"identity\") +\n  geom_label(aes(label = sales_text), position = position_stack(vjust = 0.5), size=2.5\n  ) + # Adding labels to the bars\n\n  scale_y_continuous(labels = scales::dollar_format(big.mark = \".\", \n                                                    decimal.mark = \",\", \n                                                    prefix = \"\", \n                                                    suffix = \" €\")) +\n  labs(title = \"Revenue by year and state as stacked bar plot.\", x = \"Year\", y = \"Revenue\", fill = \"State\")"
   },
   {
     "objectID": "content/03_other/06_links.html",
@@ -75,5 +40,33 @@
     "title": "Links",
     "section": "",
     "text": "Google is great, Google your problem\nStackoverflow is great, google will often take you there because someone has already asked your question, and someone else has answered, usually many people have answered your question many ways."
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html",
+    "href": "content/01_journal/04_data_visualization.html",
+    "title": "Data Visualization",
+    "section": "",
+    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
+  },
+  {
+    "objectID": "content/01_journal/02_data_acquisition.html",
+    "href": "content/01_journal/02_data_acquisition.html",
+    "title": "Data Acquisition",
+    "section": "",
+    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html",
+    "href": "content/01_journal/03_data_wrangling.html",
+    "title": "Data Wrangling",
+    "section": "",
+    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
+  },
+  {
+    "objectID": "content/02_notes/05_class_notes.html",
+    "href": "content/02_notes/05_class_notes.html",
+    "title": "Class Notes",
+    "section": "",
+    "text": "IMPORTANT: You can delete everything in here and start fresh. You might want to start by not deleting anything above this line until you know what that stuff is doing.\nThis is an .qmd file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a # in front of your text, it will create a top level-header."
   }
 ]
