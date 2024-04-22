@@ -1,8 +1,183 @@
 ---
 title: "Data Acquisition"
-author: "Joschka Schwarz"
+author: "Gabriel Storch"
 ---
+# Task 1
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+Getting some (50 observations)  weather data from openweatherapi. A table is printed and a scatterplot if temperature vs latitude is presented.
+```{r}
+library(httr)
+library(glue)
+library(tidyverse)
+```
+
+```{r}
+
+
+# loading api token from a local file
+token<- read.delim("my_openweatherapi_token.txt") |> names()
+
+# defining column names and tibble frame
+cols <- c("lat","lon", "city_name", "country", "weather_desc", "temperature_c", "wind_deg")
+
+data <- tibble(
+  lat = double(),
+  lon = double(),
+  city_name = character(),
+  country = character(),
+  weather_desc = character(),
+  temperature_c = double(),
+  wind_deg = double()
+)
+
+# getting weather for 50 random places from earth
+for (i in 1:50) {
+  lat <- runif(1, min = -90, max = 90)
+  lon <- runif(1, min = -180, max = 180)
+  # making the url for each lat/lon and token
+  url <- glue("https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={token}&units=metric")
+  # actual call to api
+  response <- GET(url)
+  # getting content from html
+  cnt <- content(response)
+  
+  # and storing the data in the data frame
+  data <- bind_rows(data, tibble(
+    lat = lat,
+    lon = lon,
+    city_name = cnt$city$name,
+    country = cnt$city$country,
+    weather_desc = cnt$list[[1]]$weather[[1]]$description,
+    temperature_c = cnt$list[[2]]$main$temp,
+    wind_deg = cnt$list[[2]]$wind$deg
+  ))
+}
+
+```
+
+```{r}
+data
+```
+
+```{r plot}
+ggplot(data, aes(x = abs(lat), y = temperature_c)) + # taking abs lat because we are interested in distance from ecuator
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) + # to check for correlation
+  labs(x = "Absolute Latitude", y = "Temperature (C)",
+       title = "Plot of Absolute Latitude vs Temperature")
+```
+
+# Task 2
+
+We are going to scrape radon-bikes.de. For this we first load libraries,
+```{r}
+library(rvest)
+library(RSQLite)
+library(DBI)
+library(xopen) 
+```
+
+... then define a function to get all bike urls..
+ 
+```{r}
+  
+
+get_bike_urls <- function() {
+  url_home <- "https://www.radon-bikes.de"
+
+  html_home <- read_html(url_home)
+
+  # getting the links for the categories
+
+  bike_categories <- html_home |>  html_elements(css="li.has-dropdown.js-dropdown > ul > li > div > a") |> html_attr("href") |> 
+  str_subset(pattern = "wear", negate = T) |>
+  str_c(url_home, ... = _)
+  
+  bike_urls <- list()
+  
+  for (url in bike_categories) {
+    bike_url <- read_html(url) |> html_elements(css="div.row.columns.serienSlider > div.mod > div.js-slider-container > div > div.o-slick-slider__slide-content > div.row > a.a-button") |> html_attr("href") |>   str_c(url_home, ... = _)
+    
+    bike_urls <- append(bike_urls, bike_url)
+  }
+  return (bike_urls)
+}
+```
+
+and a function to parse an individual bike:
+
+```{r}
+ 
+get_bike_data <- function(url) {
+  bike_price <- read_html(url) |>
+  html_element(css = "span.m-bikedetail__price--active") |>
+  html_text() |>
+  parse_number() |>
+  as.numeric()
+  
+  # check for reasonable prices
+  if (bike_price < 0 || bike_price > 10000) {
+    bike_price <- NaN
+  }
+  
+  bike_model <- read_html(url) |> 
+  html_elements(css = "h1.a-heading.a-heading--medium") |> 
+  html_text() |> 
+  str_squish() # Clean
+  
+  bike_data <- tibble(url   = url,
+                      model = bike_model,
+                      price = bike_price)
+
+  return(bike_data)
+}
+
+
+```
+
+Last, we scrape the entire website, store the results in a tibble table and
+```{r}
+urls <- get_bike_urls()
+
+my_data <- tibble(
+  url = character(),
+  model = character(),
+  price = double()
+)
+
+for (bike_url in urls) {
+  bike_data <- get_bike_data(bike_url)
+  my_data <- bind_rows(my_data, bike_data)
+}
+
+head(my_data, 10)
+
+```
+
+Put the resulting table into a sqlite db.
+
+```{r}
+# want to store data in content/data
+setwd("..")
+# connect to file
+con<-dbConnect(drv=SQLite(), dbname = "data/radon_bikes.sqlite")
+# create table
+create_table_query <- "
+CREATE TABLE IF NOT EXISTS radon_bikes (
+    url TEXT,
+    model TEXT,
+    price INTEGER
+);
+"
+
+dbExecute(con, create_table_query)
+# use dbi to write tibble to database - we do not want to duplicate the entire db!
+if (FALSE) {
+  dbWriteTable(con, "radon_bikes", my_data, append = TRUE)
+}
+# check whether everything worked
+result <- dbGetQuery(con, "SELECT * FROM radon_bikes")
+# looks good
+glimpse(result)
+
+```

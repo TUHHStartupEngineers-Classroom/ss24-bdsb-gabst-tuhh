@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.3.450">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-<meta name="author" content="Joschka Schwarz">
-
+<meta name="author" content="Gabriel Storch">
 <title>MyLabJournal - Data Acquisition</title>
 <style>
 code{white-space: pre-wrap;}
@@ -21,8 +18,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
-
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
@@ -43,7 +73,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<script id="quarto-search-options" type="application/json">{
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -62,17 +94,13 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script>
-
-
+}</script><link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 </head>
-
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
-      <div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">MyLabJournal</span>
@@ -84,7 +112,7 @@ ul.task-list li input[type="checkbox"] {
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
+<li class="nav-item">
     <a class="nav-link" href="../../index.html" rel="" target="">
  <span class="menu-text">Home</span></a>
   </li>  
@@ -92,8 +120,8 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-journal" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Journal</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-journal">    
-        <li>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-journal">
+<li>
     <a class="dropdown-item" href="../../content/01_journal/01_tidyverse.html" rel="" target="">
  <span class="dropdown-text">01 Tidyverse</span></a>
   </li>  
@@ -110,7 +138,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">04 Data Visualization</span></a>
   </li>  
     </ul>
-  </li>
+</li>
   <li class="nav-item">
     <a class="nav-link" href="../../content/02_notes/05_class_notes.html" rel="" target="">
  <span class="menu-text">Class notes</span></a>
@@ -120,25 +148,24 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Links</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools ms-auto">
+<div class="quarto-navbar-tools ms-auto">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
-    </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+<li><a href="#task-1" id="toc-task-1" class="nav-link active" data-scroll-target="#task-1"><span class="header-section-number">1</span> Task 1</a></li>
+  <li><a href="#task-2" id="toc-task-2" class="nav-link" data-scroll-target="#task-2"><span class="header-section-number">2</span> Task 2</a></li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title">Data Acquisition</h1>
 </div>
 
@@ -149,7 +176,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Joschka Schwarz </p>
+             <p>Gabriel Storch </p>
           </div>
   </div>
     
@@ -158,26 +185,274 @@ ul.task-list li input[type="checkbox"] {
   </div>
   
 
-</header>
+</header><section id="task-1" class="level1" data-number="1"><h1 data-number="1">
+<span class="header-section-number">1</span> Task 1</h1>
+<p>Getting some (50 observations) weather data from openweatherapi. A table is printed and a scatterplot if temperature vs latitude is presented.</p>
+<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-1_9474330778ada9f564a9614c51e0ab10">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(httr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'httr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(glue)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'glue' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'tidyverse' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'ggplot2' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'tibble' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'tidyr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'readr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'purrr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'dplyr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'stringr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'forcats' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'lubridate' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+#&gt; ✔ dplyr     1.1.4     ✔ readr     2.1.5
+#&gt; ✔ forcats   1.0.0     ✔ stringr   1.5.1
+#&gt; ✔ ggplot2   3.5.0     ✔ tibble    3.2.1
+#&gt; ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+#&gt; ✔ purrr     1.0.2     
+#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+#&gt; ✖ dplyr::filter() masks stats::filter()
+#&gt; ✖ dplyr::lag()    masks stats::lag()
+#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
+<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-2_33e1b148b9011996ddc81304cd888777">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># loading api token from a local file</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>token<span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"my_openweatherapi_token.txt"</span>) <span class="sc">|&gt;</span> <span class="fu">names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning in read.table(file = file, header = header, sep = sep, quote = quote, :
+#&gt; incomplete final line found by readTableHeader on 'my_openweatherapi_token.txt'</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># defining column names and tibble frame</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"lat"</span>,<span class="st">"lon"</span>, <span class="st">"city_name"</span>, <span class="st">"country"</span>, <span class="st">"weather_desc"</span>, <span class="st">"temperature_c"</span>, <span class="st">"wind_deg"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3"></a></span>
+<span id="cb19-4"><a href="#cb19-4"></a>data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb19-5"><a href="#cb19-5"></a>  <span class="at">lat =</span> <span class="fu">double</span>(),</span>
+<span id="cb19-6"><a href="#cb19-6"></a>  <span class="at">lon =</span> <span class="fu">double</span>(),</span>
+<span id="cb19-7"><a href="#cb19-7"></a>  <span class="at">city_name =</span> <span class="fu">character</span>(),</span>
+<span id="cb19-8"><a href="#cb19-8"></a>  <span class="at">country =</span> <span class="fu">character</span>(),</span>
+<span id="cb19-9"><a href="#cb19-9"></a>  <span class="at">weather_desc =</span> <span class="fu">character</span>(),</span>
+<span id="cb19-10"><a href="#cb19-10"></a>  <span class="at">temperature_c =</span> <span class="fu">double</span>(),</span>
+<span id="cb19-11"><a href="#cb19-11"></a>  <span class="at">wind_deg =</span> <span class="fu">double</span>()</span>
+<span id="cb19-12"><a href="#cb19-12"></a>)</span>
+<span id="cb19-13"><a href="#cb19-13"></a></span>
+<span id="cb19-14"><a href="#cb19-14"></a><span class="co"># getting weather for 50 random places from earth</span></span>
+<span id="cb19-15"><a href="#cb19-15"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>) {</span>
+<span id="cb19-16"><a href="#cb19-16"></a>  lat <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="at">min =</span> <span class="sc">-</span><span class="dv">90</span>, <span class="at">max =</span> <span class="dv">90</span>)</span>
+<span id="cb19-17"><a href="#cb19-17"></a>  lon <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="at">min =</span> <span class="sc">-</span><span class="dv">180</span>, <span class="at">max =</span> <span class="dv">180</span>)</span>
+<span id="cb19-18"><a href="#cb19-18"></a>  <span class="co"># making the url for each lat/lon and token</span></span>
+<span id="cb19-19"><a href="#cb19-19"></a>  url <span class="ot">&lt;-</span> <span class="fu">glue</span>(<span class="st">"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&amp;lon={lon}&amp;appid={token}&amp;units=metric"</span>)</span>
+<span id="cb19-20"><a href="#cb19-20"></a>  <span class="co"># actual call to api</span></span>
+<span id="cb19-21"><a href="#cb19-21"></a>  response <span class="ot">&lt;-</span> <span class="fu">GET</span>(url)</span>
+<span id="cb19-22"><a href="#cb19-22"></a>  <span class="co"># getting content from html</span></span>
+<span id="cb19-23"><a href="#cb19-23"></a>  cnt <span class="ot">&lt;-</span> <span class="fu">content</span>(response)</span>
+<span id="cb19-24"><a href="#cb19-24"></a>  </span>
+<span id="cb19-25"><a href="#cb19-25"></a>  <span class="co"># and storing the data in the data frame</span></span>
+<span id="cb19-26"><a href="#cb19-26"></a>  data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(data, <span class="fu">tibble</span>(</span>
+<span id="cb19-27"><a href="#cb19-27"></a>    <span class="at">lat =</span> lat,</span>
+<span id="cb19-28"><a href="#cb19-28"></a>    <span class="at">lon =</span> lon,</span>
+<span id="cb19-29"><a href="#cb19-29"></a>    <span class="at">city_name =</span> cnt<span class="sc">$</span>city<span class="sc">$</span>name,</span>
+<span id="cb19-30"><a href="#cb19-30"></a>    <span class="at">country =</span> cnt<span class="sc">$</span>city<span class="sc">$</span>country,</span>
+<span id="cb19-31"><a href="#cb19-31"></a>    <span class="at">weather_desc =</span> cnt<span class="sc">$</span>list[[<span class="dv">1</span>]]<span class="sc">$</span>weather[[<span class="dv">1</span>]]<span class="sc">$</span>description,</span>
+<span id="cb19-32"><a href="#cb19-32"></a>    <span class="at">temperature_c =</span> cnt<span class="sc">$</span>list[[<span class="dv">2</span>]]<span class="sc">$</span>main<span class="sc">$</span>temp,</span>
+<span id="cb19-33"><a href="#cb19-33"></a>    <span class="at">wind_deg =</span> cnt<span class="sc">$</span>list[[<span class="dv">2</span>]]<span class="sc">$</span>wind<span class="sc">$</span>deg</span>
+<span id="cb19-34"><a href="#cb19-34"></a>  ))</span>
+<span id="cb19-35"><a href="#cb19-35"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-3_b12604b5b8074d286ca463160ae77d82">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["lat"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["lon"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["city_name"],"name":[3],"type":["chr"],"align":["left"]},{"label":["country"],"name":[4],"type":["chr"],"align":["left"]},{"label":["weather_desc"],"name":[5],"type":["chr"],"align":["left"]},{"label":["temperature_c"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["wind_deg"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"57.5741507","2":"-149.562445","3":"","4":"","5":"broken clouds","6":"4.99","7":"89"},{"1":"-65.6814265","2":"7.694683","3":"","4":"","5":"overcast clouds","6":"-4.20","7":"33"},{"1":"-73.0491049","2":"-86.719627","3":"","4":"","5":"clear sky","6":"-28.53","7":"166"},{"1":"0.2901312","2":"36.046012","3":"Baringo","4":"KE","5":"overcast clouds","6":"26.65","7":"4"},{"1":"-87.5381176","2":"-73.158092","3":"","4":"","5":"overcast clouds","6":"-45.63","7":"121"},{"1":"14.8674097","2":"86.302994","3":"","4":"","5":"scattered clouds","6":"28.53","7":"226"},{"1":"-1.9795702","2":"79.272440","3":"","4":"","5":"light rain","6":"28.39","7":"136"},{"1":"57.5476649","2":"10.566006","3":"Strandby","4":"DK","5":"scattered clouds","6":"2.72","7":"36"},{"1":"34.9348103","2":"35.169454","3":"Arwād","4":"SY","5":"clear sky","6":"19.00","7":"65"},{"1":"-51.8315759","2":"-29.880812","3":"","4":"","5":"light rain","6":"3.64","7":"313"},{"1":"-55.0541579","2":"-67.060387","3":"Puerto Williams","4":"CL","5":"overcast clouds","6":"4.41","7":"304"},{"1":"-76.8989701","2":"54.502450","3":"","4":"","5":"scattered clouds","6":"-57.77","7":"220"},{"1":"-76.3661750","2":"-179.259255","3":"","4":"","5":"overcast clouds","6":"-29.90","7":"227"},{"1":"-65.6575897","2":"-127.542633","3":"","4":"","5":"light snow","6":"0.49","7":"297"},{"1":"-81.3375266","2":"33.889803","3":"","4":"","5":"scattered clouds","6":"-58.98","7":"28"},{"1":"-20.9046020","2":"169.193232","3":"Wacamadra","4":"NC","5":"light rain","6":"26.02","7":"141"},{"1":"69.5333592","2":"59.731561","3":"Varnek","4":"RU","5":"broken clouds","6":"-7.51","7":"359"},{"1":"-41.9617622","2":"124.227623","3":"","4":"","5":"light rain","6":"10.00","7":"219"},{"1":"22.9730912","2":"31.693545","3":"Abu Simbel","4":"EG","5":"clear sky","6":"30.79","7":"58"},{"1":"-71.7099512","2":"71.604145","3":"","4":"","5":"clear sky","6":"-27.48","7":"88"},{"1":"41.0868205","2":"169.723332","3":"","4":"","5":"light rain","6":"8.55","7":"9"},{"1":"-24.6621158","2":"-22.405690","3":"","4":"","5":"clear sky","6":"23.11","7":"117"},{"1":"67.0828740","2":"-73.460803","3":"","4":"","5":"light snow","6":"-17.80","7":"187"},{"1":"-17.4010524","2":"-12.243210","3":"","4":"","5":"broken clouds","6":"24.14","7":"130"},{"1":"-11.2794223","2":"118.525940","3":"","4":"","5":"light rain","6":"28.44","7":"113"},{"1":"-2.3326822","2":"8.672835","3":"Ogooué-Maritime Province","4":"GA","5":"overcast clouds","6":"28.99","7":"135"},{"1":"-34.8459822","2":"-12.247263","3":"","4":"","5":"light rain","6":"18.78","7":"251"},{"1":"-29.6526705","2":"-135.420888","3":"","4":"","5":"light rain","6":"20.93","7":"75"},{"1":"8.9174555","2":"175.853909","3":"","4":"","5":"light rain","6":"27.84","7":"67"},{"1":"27.9841584","2":"72.896250","3":"Bikaner","4":"IN","5":"scattered clouds","6":"34.41","7":"258"},{"1":"3.2942674","2":"92.796130","3":"","4":"","5":"light rain","6":"29.31","7":"307"},{"1":"52.2424792","2":"-21.723196","3":"","4":"","5":"light rain","6":"11.48","7":"136"},{"1":"-86.7103674","2":"-28.886818","3":"","4":"","5":"clear sky","6":"-46.62","7":"89"},{"1":"-64.5977735","2":"130.122941","3":"","4":"","5":"light snow","6":"-13.08","7":"161"},{"1":"76.8119621","2":"27.076584","3":"","4":"","5":"overcast clouds","6":"-0.02","7":"200"},{"1":"6.6616177","2":"112.742209","3":"","4":"","5":"light rain","6":"29.10","7":"71"},{"1":"-34.5281461","2":"-13.298663","3":"","4":"","5":"light rain","6":"18.83","7":"241"},{"1":"-20.7467264","2":"29.051159","3":"Gwanda","4":"ZW","5":"clear sky","6":"22.25","7":"76"},{"1":"89.7500897","2":"-91.771060","3":"","4":"","5":"light snow","6":"-8.19","7":"119"},{"1":"36.2213903","2":"118.647903","3":"Linqu","4":"CN","5":"scattered clouds","6":"25.48","7":"123"},{"1":"-47.5815322","2":"-29.869935","3":"","4":"","5":"light rain","6":"7.69","7":"257"},{"1":"-54.1235222","2":"-161.533285","3":"","4":"","5":"overcast clouds","6":"8.80","7":"19"},{"1":"-4.9192361","2":"53.731908","3":"","4":"","5":"light rain","6":"29.35","7":"117"},{"1":"57.6178061","2":"99.907717","3":"Kodinsk","4":"RU","5":"overcast clouds","6":"2.40","7":"150"},{"1":"-26.0019299","2":"-43.897642","3":"","4":"","5":"clear sky","6":"24.24","7":"12"},{"1":"18.8674379","2":"-88.611389","3":"Bacalar","4":"MX","5":"clear sky","6":"21.81","7":"356"},{"1":"20.8102934","2":"-168.403947","3":"","4":"","5":"few clouds","6":"24.18","7":"81"},{"1":"-0.2272774","2":"73.472948","3":"Meedhoo","4":"MV","5":"broken clouds","6":"29.52","7":"95"},{"1":"-86.0177482","2":"-135.622599","3":"","4":"","5":"overcast clouds","6":"-37.02","7":"157"},{"1":"-8.6301670","2":"132.898466","3":"","4":"","5":"light rain","6":"28.51","7":"149"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
 </div>
-<div class="callout-body-container callout-body">
-<p>You can delete everything in here and start fresh.</p>
+</div>
+<div class="cell" data-hash="02_data_acquisition_cache/html/plot_bec0c112ea13c48b7e1b9361a72c7a5b">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">abs</span>(lat), <span class="at">y =</span> temperature_c)) <span class="sc">+</span> <span class="co"># taking abs lat because we are interested in distance from ecuator</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> <span class="co"># to check for correlation</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Absolute Latitude"</span>, <span class="at">y =</span> <span class="st">"Temperature (C)"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5"></a>       <span class="at">title =</span> <span class="st">"Plot of Absolute Latitude vs Temperature"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; `geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><a href="02_data_acquisition_files/figure-html/plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="02_data_acquisition_files/figure-html/plot-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="task-2" class="level1" data-number="2"><h1 data-number="2">
+<span class="header-section-number">2</span> Task 2</h1>
+<p>We are going to scrape radon-bikes.de. For this we first load libraries,</p>
+<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-4_63a7fffcfdd542b428820538b497572f">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">library</span>(rvest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'rvest' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; 
+#&gt; Attaching package: 'rvest'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; The following object is masked from 'package:readr':
+#&gt; 
+#&gt;     guess_encoding</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">library</span>(RSQLite)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'RSQLite' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">library</span>(DBI)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'DBI' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">library</span>(xopen) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: package 'xopen' was built under R version 4.2.3</code></pre>
+</div>
+</div>
+<p>… then define a function to get all bike urls..</p>
+<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-5_6bcd105c35a5300e3dd26f8eb58985a5">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>get_bike_urls <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb33-2"><a href="#cb33-2"></a>  url_home <span class="ot">&lt;-</span> <span class="st">"https://www.radon-bikes.de"</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a></span>
+<span id="cb33-4"><a href="#cb33-4"></a>  html_home <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url_home)</span>
+<span id="cb33-5"><a href="#cb33-5"></a></span>
+<span id="cb33-6"><a href="#cb33-6"></a>  <span class="co"># getting the links for the categories</span></span>
+<span id="cb33-7"><a href="#cb33-7"></a></span>
+<span id="cb33-8"><a href="#cb33-8"></a>  bike_categories <span class="ot">&lt;-</span> html_home <span class="sc">|&gt;</span>  <span class="fu">html_elements</span>(<span class="at">css=</span><span class="st">"li.has-dropdown.js-dropdown &gt; ul &gt; li &gt; div &gt; a"</span>) <span class="sc">|&gt;</span> <span class="fu">html_attr</span>(<span class="st">"href"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb33-9"><a href="#cb33-9"></a>  <span class="fu">str_subset</span>(<span class="at">pattern =</span> <span class="st">"wear"</span>, <span class="at">negate =</span> T) <span class="sc">|&gt;</span></span>
+<span id="cb33-10"><a href="#cb33-10"></a>  <span class="fu">str_c</span>(url_home, <span class="at">... =</span> _)</span>
+<span id="cb33-11"><a href="#cb33-11"></a>  </span>
+<span id="cb33-12"><a href="#cb33-12"></a>  bike_urls <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb33-13"><a href="#cb33-13"></a>  </span>
+<span id="cb33-14"><a href="#cb33-14"></a>  <span class="cf">for</span> (url <span class="cf">in</span> bike_categories) {</span>
+<span id="cb33-15"><a href="#cb33-15"></a>    bike_url <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url) <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="at">css=</span><span class="st">"div.row.columns.serienSlider &gt; div.mod &gt; div.js-slider-container &gt; div &gt; div.o-slick-slider__slide-content &gt; div.row &gt; a.a-button"</span>) <span class="sc">|&gt;</span> <span class="fu">html_attr</span>(<span class="st">"href"</span>) <span class="sc">|&gt;</span>   <span class="fu">str_c</span>(url_home, <span class="at">... =</span> _)</span>
+<span id="cb33-16"><a href="#cb33-16"></a>    </span>
+<span id="cb33-17"><a href="#cb33-17"></a>    bike_urls <span class="ot">&lt;-</span> <span class="fu">append</span>(bike_urls, bike_url)</span>
+<span id="cb33-18"><a href="#cb33-18"></a>  }</span>
+<span id="cb33-19"><a href="#cb33-19"></a>  <span class="fu">return</span> (bike_urls)</span>
+<span id="cb33-20"><a href="#cb33-20"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>and a function to parse an individual bike:</p>
+<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-6_2ec6c32fab27c1966054257face7b0a2">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>get_bike_data <span class="ot">&lt;-</span> <span class="cf">function</span>(url) {</span>
+<span id="cb34-2"><a href="#cb34-2"></a>  bike_price <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url) <span class="sc">|&gt;</span></span>
+<span id="cb34-3"><a href="#cb34-3"></a>  <span class="fu">html_element</span>(<span class="at">css =</span> <span class="st">"span.m-bikedetail__price--active"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb34-4"><a href="#cb34-4"></a>  <span class="fu">html_text</span>() <span class="sc">|&gt;</span></span>
+<span id="cb34-5"><a href="#cb34-5"></a>  <span class="fu">parse_number</span>() <span class="sc">|&gt;</span></span>
+<span id="cb34-6"><a href="#cb34-6"></a>  <span class="fu">as.numeric</span>()</span>
+<span id="cb34-7"><a href="#cb34-7"></a>  </span>
+<span id="cb34-8"><a href="#cb34-8"></a>  <span class="co"># check for reasonable prices</span></span>
+<span id="cb34-9"><a href="#cb34-9"></a>  <span class="cf">if</span> (bike_price <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">||</span> bike_price <span class="sc">&gt;</span> <span class="dv">10000</span>) {</span>
+<span id="cb34-10"><a href="#cb34-10"></a>    bike_price <span class="ot">&lt;-</span> <span class="cn">NaN</span></span>
+<span id="cb34-11"><a href="#cb34-11"></a>  }</span>
+<span id="cb34-12"><a href="#cb34-12"></a>  </span>
+<span id="cb34-13"><a href="#cb34-13"></a>  bike_model <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url) <span class="sc">|&gt;</span> </span>
+<span id="cb34-14"><a href="#cb34-14"></a>  <span class="fu">html_elements</span>(<span class="at">css =</span> <span class="st">"h1.a-heading.a-heading--medium"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb34-15"><a href="#cb34-15"></a>  <span class="fu">html_text</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb34-16"><a href="#cb34-16"></a>  <span class="fu">str_squish</span>() <span class="co"># Clean</span></span>
+<span id="cb34-17"><a href="#cb34-17"></a>  </span>
+<span id="cb34-18"><a href="#cb34-18"></a>  bike_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">url   =</span> url,</span>
+<span id="cb34-19"><a href="#cb34-19"></a>                      <span class="at">model =</span> bike_model,</span>
+<span id="cb34-20"><a href="#cb34-20"></a>                      <span class="at">price =</span> bike_price)</span>
+<span id="cb34-21"><a href="#cb34-21"></a></span>
+<span id="cb34-22"><a href="#cb34-22"></a>  <span class="fu">return</span>(bike_data)</span>
+<span id="cb34-23"><a href="#cb34-23"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Last, we scrape the entire website, store the results in a tibble table and</p>
+<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-7_5ffbd5d55131a052db4eaa80a794fc54">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>urls <span class="ot">&lt;-</span> <span class="fu">get_bike_urls</span>()</span>
+<span id="cb35-2"><a href="#cb35-2"></a></span>
+<span id="cb35-3"><a href="#cb35-3"></a>my_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb35-4"><a href="#cb35-4"></a>  <span class="at">url =</span> <span class="fu">character</span>(),</span>
+<span id="cb35-5"><a href="#cb35-5"></a>  <span class="at">model =</span> <span class="fu">character</span>(),</span>
+<span id="cb35-6"><a href="#cb35-6"></a>  <span class="at">price =</span> <span class="fu">double</span>()</span>
+<span id="cb35-7"><a href="#cb35-7"></a>)</span>
+<span id="cb35-8"><a href="#cb35-8"></a></span>
+<span id="cb35-9"><a href="#cb35-9"></a><span class="cf">for</span> (bike_url <span class="cf">in</span> urls) {</span>
+<span id="cb35-10"><a href="#cb35-10"></a>  bike_data <span class="ot">&lt;-</span> <span class="fu">get_bike_data</span>(bike_url)</span>
+<span id="cb35-11"><a href="#cb35-11"></a>  my_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(my_data, bike_data)</span>
+<span id="cb35-12"><a href="#cb35-12"></a>}</span>
+<span id="cb35-13"><a href="#cb35-13"></a></span>
+<span id="cb35-14"><a href="#cb35-14"></a><span class="fu">head</span>(my_data, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["url"],"name":[1],"type":["chr"],"align":["left"]},{"label":["model"],"name":[2],"type":["chr"],"align":["left"]},{"label":["price"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"https://www.radon-bikes.de/mountainbike/hardtail/jealous/jealous-80-2024/","2":"JEALOUS 8.0","3":"2999"},{"1":"https://www.radon-bikes.de/mountainbike/hardtail/jealous/jealous-90-2024/","2":"JEALOUS 9.0","3":"3399"},{"1":"https://www.radon-bikes.de/mountainbike/hardtail/jealous/jealous-100-ea-2024/","2":"JEALOUS 10.0 EA","3":"5499"},{"1":"https://www.radon-bikes.de/mountainbike/hardtail/jealous/jealous-80-2023/","2":"JEALOUS 8.0","3":"2199"},{"1":"https://www.radon-bikes.de/mountainbike/hardtail/jealous/jealous-90-2023/","2":"JEALOUS 9.0","3":"2599"},{"1":"https://www.radon-bikes.de/mountainbike/hardtail/jealous/jealous-100-2023/","2":"JEALOUS 10.0","3":"3299"},{"1":"https://www.radon-bikes.de/mountainbike/hardtail/jealous/jealous-100-ea-2023/","2":"JEALOUS 10.0 EA","3":"4499"},{"1":"https://www.radon-bikes.de/mountainbike/hardtail/jealous-al/jealous-al-60-2024/","2":"JEALOUS AL 6.0","3":"999"},{"1":"https://www.radon-bikes.de/mountainbike/hardtail/jealous-al/jealous-al-60-2024-petroleumblue/","2":"JEALOUS AL 6.0","3":"999"},{"1":"https://www.radon-bikes.de/mountainbike/hardtail/jealous-al/jealous-al-70-2024/","2":"JEALOUS AL 7.0","3":"999"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>Put the resulting table into a sqlite db.</p>
+<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-8_7a43dc3a68afbb649db975d24e52cd00">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># want to store data in content/data</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a><span class="fu">setwd</span>(<span class="st">".."</span>)</span>
+<span id="cb36-3"><a href="#cb36-3"></a><span class="co"># connect to file</span></span>
+<span id="cb36-4"><a href="#cb36-4"></a>con<span class="ot">&lt;-</span><span class="fu">dbConnect</span>(<span class="at">drv=</span><span class="fu">SQLite</span>(), <span class="at">dbname =</span> <span class="st">"data/radon_bikes.sqlite"</span>)</span>
+<span id="cb36-5"><a href="#cb36-5"></a><span class="co"># create table</span></span>
+<span id="cb36-6"><a href="#cb36-6"></a>create_table_query <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb36-7"><a href="#cb36-7"></a><span class="st">CREATE TABLE IF NOT EXISTS radon_bikes (</span></span>
+<span id="cb36-8"><a href="#cb36-8"></a><span class="st">    url TEXT,</span></span>
+<span id="cb36-9"><a href="#cb36-9"></a><span class="st">    model TEXT,</span></span>
+<span id="cb36-10"><a href="#cb36-10"></a><span class="st">    price INTEGER</span></span>
+<span id="cb36-11"><a href="#cb36-11"></a><span class="st">);</span></span>
+<span id="cb36-12"><a href="#cb36-12"></a><span class="st">"</span></span>
+<span id="cb36-13"><a href="#cb36-13"></a></span>
+<span id="cb36-14"><a href="#cb36-14"></a><span class="fu">dbExecute</span>(con, create_table_query)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># use dbi to write tibble to database - we do not want to duplicate the entire db!</span></span>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="cf">if</span> (<span class="cn">FALSE</span>) {</span>
+<span id="cb38-3"><a href="#cb38-3"></a>  <span class="fu">dbWriteTable</span>(con, <span class="st">"radon_bikes"</span>, my_data, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb38-4"><a href="#cb38-4"></a>}</span>
+<span id="cb38-5"><a href="#cb38-5"></a><span class="co"># check whether everything worked</span></span>
+<span id="cb38-6"><a href="#cb38-6"></a>result <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"SELECT * FROM radon_bikes"</span>)</span>
+<span id="cb38-7"><a href="#cb38-7"></a><span class="co"># looks good</span></span>
+<span id="cb38-8"><a href="#cb38-8"></a><span class="fu">glimpse</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Rows: 139
+#&gt; Columns: 3
+#&gt; $ url   &lt;chr&gt; "https://www.radon-bikes.de/mountainbike/hardtail/jealous/jealou…
+#&gt; $ model &lt;chr&gt; "JEALOUS 8.0", "JEALOUS 9.0", "JEALOUS 10.0 EA", "JEALOUS 8.0", …
+#&gt; $ price &lt;dbl&gt; 2999, 3399, 5499, 2199, 2599, 3299, 4499, 999, 999, 999, 999, 11…</code></pre>
 </div>
 </div>
 
 
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -526,7 +801,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","descPosition":"bottom","closeEffect":"zoom","selector":".lightbox","loop":true});</script>
 
 
 </body></html>
