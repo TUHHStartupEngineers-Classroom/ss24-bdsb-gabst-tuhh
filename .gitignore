@@ -11,7 +11,8 @@
 
 # Session Data files
 .RData
-content/my_openweatherapi_token.txt
+content/01_journal/my_openweatherapi_token.txt
+content/01_journal/03_data/
 # User-specific files
 .Ruserdata
 
