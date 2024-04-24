@@ -4,9 +4,11 @@ author: "Gabriel Storch"
 ---
 # Loading of libraries
 ```{r}
+suppressWarnings({
 library(tidyverse)
 library(vroom)
 library(glue)
+})
 ```
 
 # Loading the data
@@ -62,6 +64,7 @@ uspc_tbl <- vroom(
 
 ```
 
+# Top Ten US companies (patent-wise) 2014
 
 ```{r}
 
@@ -78,24 +81,49 @@ grouped_us_patent_assignee_tbl <- us_patent_assignee_tbl |>
   arrange(desc(num_patents))
 
 
-ten_us_companies_with_most_patents <- inner_join(head(grouped_us_patent_assignee_tbl, 10), us_assignee_tbl, by="assignee_id")[c("num_patents", "organization")]
+ten_us_companies_with_most_patents <- inner_join(head(grouped_us_patent_assignee_tbl, 10), us_assignee_tbl, by="assignee_id")[c("organization", "num_patents")]
 
 ten_us_companies_with_most_patents
 
 ```
 
+# Top Ten US companies (patent-wise) in August of 2014
+
 ```{r}
 patent_tbl_august <- patent_tbl[patent_tbl$date == 8,]
 
-grouped_us_patent_assignee_august_tbl <- us_patent_assignee_tbl |> inner_join(patent_tbl_august, by="patent_id") |> group_by(organization) |> summarize(num_patents=n()) |> arrange(desc(num_patents))
-ten_us_companies_with_most_patents_august = head(grouped_us_patent_assignee_august_tbl, 10)
+ten_us_companies_with_most_patents_august <- us_patent_assignee_tbl |>
+  inner_join(patent_tbl_august, by="patent_id") |>
+  group_by(organization) |> 
+  summarize(num_patents=n()) |> # counts rows 
+  arrange(desc(num_patents)) |>
+  head(10)
+
 ten_us_companies_with_most_patents_august
 ```
-```{r}
-company_assignee_tbl <- assignee_tbl[assignee_tbl$type == "2" | assignee_tbl$type == "3",] |> rename(assignee_id = id)
-full_frame <- company_assignee_tbl |> inner_join(patent_assignee_tbl, by="assignee_id") |> group_by(assignee_id) |> summarize(num_patents=n()) |> arrange(desc(num_patents)) |> head(10)
 
-company_patent_uspc_tbl <- company_assignee_tbl |> inner_join(patent_assignee_tbl, join_by(assignee_id)) |> inner_join(uspc_tbl, by="patent_id", relationship = "many-to-many")
+# Five most common USPCs for the global Top Ten companies (patent-wise) of 2014
+
+```{r}
+# type 2 and 3 are companies
+company_assignee_tbl <- assignee_tbl[assignee_tbl$type == "2" | assignee_tbl$type == "3",] |> rename(assignee_id = id)
+
+# global top ten for patents
+global_top_ten_frame <- company_assignee_tbl |> 
+  inner_join(patent_assignee_tbl, by="assignee_id") |> 
+  group_by(assignee_id) |> 
+  summarize(num_patents=n()) |> 
+  arrange(desc(num_patents)) |> 
+  head(10)
+
+# mapping company to uspc
+
+company_patent_uspc_tbl <- company_assignee_tbl |> 
+  inner_join(patent_assignee_tbl, join_by(assignee_id)) |> 
+  inner_join(uspc_tbl, by="patent_id", relationship = "many-to-many")
+
+
+# for creation of final result frame
 company_uspc<- tibble(
   name = character(),
   fst = character(),
@@ -104,20 +132,41 @@ company_uspc<- tibble(
   fourth =  character(),
   fifth =  character()
 )
-for (company in full_frame$assignee_id) {
-  tmp <- company_patent_uspc_tbl[company_patent_uspc_tbl$assignee_id == company,] |> group_by(mainclass_id) |> summarize(count = n()) |> arrange(desc(count)) |> head(5)
+
+# for each company in the top ten, get the 5 most common USPCs
+for (company in global_top_ten_frame$assignee_id) {
+  top_uspc_codes <- company_patent_uspc_tbl[company_patent_uspc_tbl$assignee_id == company,] |>
+    group_by(mainclass_id) |> 
+    summarize(count = n()) |> 
+    arrange(desc(count)) |> 
+    head(5)
+  
   comp_name <- head(company_assignee_tbl[company_assignee_tbl$assignee_id==company,], 1)$organization
-  cls <- tmp$mainclass_id
+  cls <- top_uspc_codes$mainclass_id
 
   company_uspc <- company_uspc |> add_row(name=comp_name,
                           fst=cls[1],
                           snd = cls[2],
                           third =  cls[3],
                           fourth =  cls[4],
-                          fifth =  cls[5]) # append(company_uspc, c(comp_name, tmp$mainclass_id))
+                          fifth =  cls[5])
 }
-
+# Top Five USPCs for each of the global Top Ten Companies
 company_uspc
+
+```
+
+
+# And the global Top Five tech sectors
+``` {r}
+top_uspc_codes <- company_patent_uspc_tbl[company_patent_uspc_tbl$assignee_id %in% global_top_ten_frame$assignee_id,] |>
+    group_by(mainclass_id) |> 
+    summarize(count = n()) |> 
+    arrange(desc(count)) |> 
+    head(5)
+
+#Globally most innovative tech sectors
+top_uspc_codes$mainclass_id
 
 ```
 

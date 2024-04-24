@@ -1,8 +1,117 @@
 ---
 title: "Data Visualization"
-author: "Joschka Schwarz"
+author: "Gabriel Storch"
 ---
+# Loading of libraries
+```{r}
+suppressWarnings({
+  library(tidyverse)
+  library(scales)
+  library(glue)
+  })
+```
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+\# Challenge 1
+```{r}
+covid_data_tbl <- read_csv("https://covid.ourworldindata.org/data/owid-covid-data.csv")
+```
+# Subsetting
+```{r}
+# some predicates
+ger <- covid_data_tbl$location == "Germany"
+uk <- covid_data_tbl$location == "United Kingdom"
+fr <- covid_data_tbl$location == "France"
+esp <- covid_data_tbl$location == "Spain"
+us <- covid_data_tbl$location == "United States"
+time_limit <- covid_data_tbl$date <= date("2022-04-19")
+
+# subsetting data
+country_data <- covid_data_tbl[(ger | uk | fr | esp | us) & time_limit,]
+
+```
+# Function for format labeling of y-axis
+```{r}
+format_labels <- function(x) {
+  paste0(format(x / 1e6, scientific = FALSE), "M")
+}
+```
+
+# Getting last relevant us/fr cases as number and text. 
+
+```{r}
+last_us_cases <- country_data[country_data$location == "United States",] |> arrange(date) |> tail(1)
+last_us_cases <- last_us_cases$total_cases
+suppressWarnings({
+  last_us_cases_text <- format(last_us_cases, big.mark = ".")
+})
+
+
+last_fr_cases <- country_data[country_data$location == "France",] |> arrange(date) |> tail(1)
+last_fr_cases <- last_fr_cases$total_cases
+suppressWarnings(
+  last_fr_cases_text <- format(last_fr_cases, big.mark = ".")
+)
+
+```
+# Plotting
+```{r plot2, fig.width=20, fig.height=7}
+suppressWarnings({
+  country_data |> select(date, total_cases, location) |> group_by(location) |> # total cases by location wanted
+    ggplot(aes(date, total_cases, color = location)) + # plotting
+    geom_line() + # line plot
+    theme_minimal() + # minimal theme
+    scale_x_date(labels = date_format("%B '%y"), date_breaks = "1 month") + # x axis to monthly 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "bottom") + # rotating x-axis text and fixing legend position
+    guides(color = guide_legend(ncol = 3)) + # fixing legend layout  
+    scale_y_continuous(labels = format_labels, breaks = seq(0, 800, by = 50) * 1e6) + # y axis to million (using above function)
+  
+    labs(x = "", y = "Cumulative Cases", title = "Confirmed Covid cases in Europe and USA", subtitle = "As of 19-04-22", color = "Country") + # labels
+    geom_text(aes(x= date("2022-04-19"), y = last_us_cases, label = glue("{last_us_cases_text} (US)"), color="black"), color="black", hjust=0.8) + # us - deaths
+      geom_text(aes(x= date("2022-04-19"), y = last_fr_cases, label =glue("{last_fr_cases_text} (Fr)"), color="black"), color="black", hjust=0.8, vjust=-0.2) + # fr - deaths (for reference)
+    scale_color_manual(values = rainbow(length(unique(country_data$location)))) # the "non-default" color map. Viridis looked even worse.
+})
+```
+\# Challenge 2
+
+Plotting death rate by country on a world map.
+
+# Wrangling
+```{r}
+# getting borders 
+world <- map_data("world")
+# mutating covid data names 
+covid_data_tbl <- covid_data_tbl |>  mutate(location = case_when(
+
+    location == "United Kingdom" ~ "UK",
+    location == "United States" ~ "USA",
+    location == "Democratic Republic of Congo" ~ "Democratic Republic of the Congo",
+    TRUE ~ location
+
+  )) %>%
+  distinct()
+
+# create death_by_pop column and take the value for the last recorded date in the dataset
+plot_data <- covid_data_tbl |> mutate(death_by_pop=total_deaths/population) |> filter(date==date("2024-04-07"))
+
+# this is a bit weird; merging/joining puts the "by" column first in the result. this breaks the geom_map functionality...
+merged_data <- merge(world, plot_data[c("location", "death_by_pop")], by.x = "region", by.y= "location", all.x=TRUE)
+# hence i use merge to combine the data, but then just append a column to the original world data
+world$death_by_pop <- merged_data$death_by_pop
+
+```
+
+# Visualization
+```{r plot3, fig.width=20, fig.height=7}
+ggplot() +
+  geom_map(data = world, map = world,
+           aes(map_id = region, fill = death_by_pop),
+           color = "black") + # basic plot, fill defines based on what the countries are filled, color defines color of country outline
+  expand_limits(x = world$long, y = world$lat)  + # sets width for plot
+  theme_minimal() + # reduces/removes unwanted elements
+  scale_fill_gradient(low = "red", high = "darkred", na.value = "darkgray", labels = percent_format()) + # gradient for fill
+  labs(y= "", x="", title="Confirmed COVID-19 deaths relative to size of population", subtitle="Around 6.2 million confirmed deaths worldwide.", fill="Mortality Rate") + # labels
+  theme(axis.text.x = element_blank(), 
+        axis.text.y = element_blank()) # theme_minimal would not remove the numbers on the axes, this does.
+
+```
+

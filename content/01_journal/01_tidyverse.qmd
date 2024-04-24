@@ -3,27 +3,31 @@ title: "Tidyverse"
 author: "Gabriel Storch"
 ---
 
-\# Challenge
-
-## Task 1
+\# Task 1
 
 For task 1, we load, wrangle and visualize the data wrt. to revenue by state.
 
-### Loading of libraries
+# Loading of libraries
 
 ```{r}
-library("readxl")
-library("magrittr")
-library("tidyverse")
-library(lubridate)
+suppressWarnings({
+  library("readxl")
+  library("magrittr")
+  library("tidyverse")
+  library(lubridate)
+})
+
 ```
 
-### Loading and joining of data
+# Loading and joining of data
 
 Data is stored in content/data, so we have to change the working directory for loading of data. Then we read the data in and join it.
 
 ```{r}
-setwd("..")
+suppressWarnings({
+  setwd("..")
+})
+
 bikes_tbl <- read_excel("./data/01_bike_sales/01_raw_data/bikes.xlsx")
 order_lines<-read_excel("./data/01_bike_sales/01_raw_data/orderlines.xlsx")
 bikeshops_tbl  <- read_excel("./data/01_bike_sales/01_raw_data/bikeshops.xlsx")
@@ -35,7 +39,7 @@ bikes_orderlines_bikeshops <-order_lines %>%
 bikes_orderlines_bikeshops %>% glimpse()
 ```
 
-### Wrangling
+# Wrangling
 
 We reuse total price logic for easy plotting and separate location into city and state.
 
@@ -47,7 +51,7 @@ bikes_orderlines_bikeshops<-bikes_orderlines_bikeshops %>%
            sep    = ", ") 
 ```
 
-### Grouping/Manipulation
+# Grouping/Manipulation
 
 We group the data by state and sum up the total price. Then we reuse the sales_text for nicer plotting.
 
@@ -63,7 +67,7 @@ sales_by_location<- bikes_orderlines_bikeshops[, c("state", "city", "total.price
 sales_by_location
 ```
 
-### Visualization
+# Visualization
 
 We visualize the sales data by state. By inspection we find out, that NRW has the most revenue from bike sales.
 
@@ -85,17 +89,19 @@ sales_by_location %>%
 
 ```
 
-## Task 2
+\# Task 2
 
 For task 2, we load, wrangle and visualize the data wrt. revenue by state and year. Loading and wrangling are not necessary, as we can reuse our results from before.
 
-### Grouping
+# Grouping
 
 This time we group by location and year.
 
 ```{r}
-sales_by_location_and_year<-bikes_orderlines_bikeshops[, c("order.date", "state", "city", "total.price")]
-sales_by_location_and_year_grouped<- sales_by_location_and_year %>%
+
+suppressWarnings({
+  sales_by_location_and_year<-bikes_orderlines_bikeshops[, c("order.date", "state", "city", "total.price")]
+  sales_by_location_and_year_grouped<- sales_by_location_and_year %>%
   mutate(order.date = year(order.date)) %>%
   group_by(order.date, state) %>%
   summarize(sales=sum(total.price)) %>%
@@ -103,10 +109,12 @@ sales_by_location_and_year_grouped<- sales_by_location_and_year %>%
                                      decimal.mark = ",", 
                                      prefix = "", 
                                      suffix = " €"))
+})
+
 sales_by_location_and_year
 ```
 
-### Visualization
+# Visualization
 
 We do two plots, once a facet plot and once a stacked bar plot, as the latter visualizes the proportions quite nicely, while the former helps understand the individual trend.
 

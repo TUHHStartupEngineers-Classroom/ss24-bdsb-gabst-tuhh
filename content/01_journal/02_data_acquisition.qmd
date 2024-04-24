@@ -6,17 +6,27 @@ author: "Gabriel Storch"
 
 Getting some (50 observations)  weather data from openweatherapi. A table is printed and a scatterplot if temperature vs latitude is presented.
 ```{r}
-library(httr)
-library(glue)
-library(tidyverse)
-```
+suppressWarnings(
+  {
+    library(httr)
+    library(glue)
+    library(tidyverse)
+    library(rvest)
+    library(RSQLite)
+    library(DBI)
+    library(xopen) 
+  }
+)
 
+```
+# Getting Data from API: openweathermap.org
 ```{r}
 
 
 # loading api token from a local file
-token<- read.delim("my_openweatherapi_token.txt") |> names()
-
+suppressWarnings({
+  token<- read.delim("my_openweatherapi_token.txt") |> names()
+})
 # defining column names and tibble frame
 cols <- c("lat","lon", "city_name", "country", "weather_desc", "temperature_c", "wind_deg")
 
@@ -54,10 +64,11 @@ for (i in 1:50) {
 }
 
 ```
-
+# Sanity Check: API call worked?
 ```{r}
 data
 ```
+# Example Visualization
 
 ```{r plot}
 ggplot(data, aes(x = abs(lat), y = temperature_c)) + # taking abs lat because we are interested in distance from ecuator
@@ -69,15 +80,9 @@ ggplot(data, aes(x = abs(lat), y = temperature_c)) + # taking abs lat because we
 
 # Task 2
 
-We are going to scrape radon-bikes.de. For this we first load libraries,
-```{r}
-library(rvest)
-library(RSQLite)
-library(DBI)
-library(xopen) 
-```
+We are going to scrape radon-bikes.de. 
 
-... then define a function to get all bike urls..
+# Define a function to get all bike urls..
  
 ```{r}
   
@@ -104,7 +109,7 @@ get_bike_urls <- function() {
 }
 ```
 
-and a function to parse an individual bike:
+# and a function to parse an individual bike:
 
 ```{r}
  
@@ -135,7 +140,7 @@ get_bike_data <- function(url) {
 
 ```
 
-Last, we scrape the entire website, store the results in a tibble table and
+# Last, we scrape the entire website, store the results in a tibble table and
 ```{r}
 urls <- get_bike_urls()
 
@@ -154,11 +159,12 @@ head(my_data, 10)
 
 ```
 
-Put the resulting table into a sqlite db.
+# Put the resulting table into a sqlite db.
 
 ```{r}
 # want to store data in content/data
-setwd("..")
+suppressWarnings({setwd("..")})
+
 # connect to file
 con<-dbConnect(drv=SQLite(), dbname = "data/radon_bikes.sqlite")
 # create table
@@ -171,7 +177,8 @@ CREATE TABLE IF NOT EXISTS radon_bikes (
 "
 
 dbExecute(con, create_table_query)
-# use dbi to write tibble to database - we do not want to duplicate the entire db!
+# use dbi to write tibble to database 
+# we do not want to duplicate the entire db, hence do not execute this line of code
 if (FALSE) {
   dbWriteTable(con, "radon_bikes", my_data, append = TRUE)
 }
